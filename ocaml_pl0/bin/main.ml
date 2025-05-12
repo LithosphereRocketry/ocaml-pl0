@@ -1,7 +1,10 @@
-let handle_file file = 
-  print_endline file;;
+let handle_path (path : string) = 
+  let f = open_in path in
+    let text = In_channel.input_all(f) in
+      print_endline text
 
-let handle_all files = 
-  (Array.map(handle_file) files);;
+let rec handle_all: string list -> unit = function
+  | path :: rest -> (handle_path path); (handle_all rest)
+  | [] -> ()
 
-let () = (ignore @@ handle_all Sys.argv)
+let () = ignore @@ handle_all @@ List.tl @@ Array.to_list Sys.argv
