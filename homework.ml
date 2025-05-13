@@ -16,11 +16,10 @@ Also, if not enough values are available on the stack to complete an operation,
 it should call the standard function failwith with some useful message to throw
 a runtime error.
 
-Head to https://try.ocaml.pro
-Paste your code in the editor
-Click "Eval code"
+To get started, head to https://try.ocaml.pro, paste your code in the editor,
+and click "Eval code".
 
-To run the test cases for the final program, type test () into the console.
+To run the test cases for the final program, type `test ()` into the console.
 To manually run your code, run the eval function from the the console:
 eval "<RPN sequence>"
 For example,
@@ -43,7 +42,7 @@ This type contains all of the possible varieties of tokens that may appear
 in the input. You will probably want to fill this in as you write lex_token.
 *)
 type token =
-  | Todo
+  | TODO
 
 (*
 Breaks a string into space-separated pieces. String.split_on_char may be
@@ -60,7 +59,7 @@ keyword for slightly nicer pattern-matching, although it's not required.
 Ex. lex_token "1234" = Num 1234 (or whatever you end up using)
 *)
 let lex_token (s : string) : token = 
-  Todo
+  TODO
 
 (*
 Given the current state of the RPN stack, apply the next token to it. Similar to

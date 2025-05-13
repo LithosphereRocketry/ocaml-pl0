@@ -15,6 +15,11 @@ let add4 (n : int) : int = n + 4
 let add7 (n : int) : int = add4 @@ add3 n
 
 
+let rec squareList (l : int list) : int list =
+  match l with
+  | (current::rest) -> current * current :: squareList rest
+  | [] -> []
+
 let rec myMap (func : int -> int) (l : int list) : int list =
   match l with
   | (current::rest) -> func current :: myMap func rest
@@ -23,6 +28,9 @@ let rec myMap (func : int -> int) (l : int list) : int list =
 let rec myMap (func : int -> int) : int list -> int list = function
   | (current::rest) -> func current :: myMap func rest
   | [] -> []
+
+let squareList (l : int list) : int list =
+  myMap (fun x -> x * x) l
 
 let rec controlMap (func : string -> string) (strings : string list) : string list =
   match strings with
