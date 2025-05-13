@@ -1,39 +1,3 @@
-(*
-You will be writing a small interpreted four-function Reverse Polish Notation calculator
-If you are unfamiliar with RPN:
-https://www.computersciencebytes.com/array-variables/reverse-polish-notation/
-
-Your program should accept a string made up of numbers and symbols, separated
-by single spaces. (Don't worry about handling different amounts or types of
-whitespace.) For each number encountered, it should add it to a stack; for
-each operator, it should perform the requested operation on the top two elements
-and place the result back on the stack. After all input has been used, the
-program should return the top value of the stack.
-
-If an invalid symbol is given, the program should call the standard function
-invalid_arg with some useful message to throw an illegal-argument exception.
-Also, if not enough values are available on the stack to complete an operation,
-it should call the standard function failwith with some useful message to throw
-a runtime error.
-
-Head to https://try.ocaml.pro
-Paste your code in the editor
-Click "Eval code"
-
-Test cases are run automatically when you press the Eval Code button. To
-manually run your code, type in the console:
-eval "<RPN sequence>"
-For example,
-eval "3 2 1 + *"
-should evaluate to 9.
-
-As an extra feature, add a new operator ? to the calculator. When ? is called,
-it prints the current contents of the stack to the console without modifying
-any values. You may implement this in any way you prefer as long as the function
-signature of eval is not changed and the printout is reasonably usable.
-
-*)
-
 type token =
   | Plus
   | Minus
@@ -100,9 +64,6 @@ let tests : (string * test_result) list = [
   "8 7 6 5 4 3 2 1 + + +", Result 10.;
 ]
 
-let run_test : string * float -> bool = function
-  | (expr, expected) -> eval expr == expected
-
 let results_equal : test_result * test_result -> bool = function
   | Result a, Result b -> a == b
   | InvalidArg, InvalidArg -> true
@@ -126,7 +87,7 @@ let run_test : string * test_result -> int = function
       (string_of_test_result expected)
     ; 0)
 
-let () = 
+let test () : unit = 
   Printf.printf "%i of %i tests passed"
   (List.fold_left (+) 0 @@ List.map run_test tests)
   (List.length tests)

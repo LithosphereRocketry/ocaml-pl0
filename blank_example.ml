@@ -1,6 +1,6 @@
 (*
-You will be writing a small interpreted four-function Reverse Polish Notation calculator
-If you are unfamiliar with RPN:
+You will be writing a small interpreted four-function Reverse Polish Notation
+calculator. If you are unfamiliar with RPN:
 https://www.computersciencebytes.com/array-variables/reverse-polish-notation/
 
 Your program should accept a string made up of numbers and symbols, separated
@@ -20,55 +20,77 @@ Head to https://try.ocaml.pro
 Paste your code in the editor
 Click "Eval code"
 
-Test cases are run automatically when you press the Eval Code button. To
-manually run your code, type in the console:
+To run the test cases for the final program, type test () into the console.
+To manually run your code, run the eval function from the the console:
 eval "<RPN sequence>"
 For example,
 eval "3 2 1 + *"
-should evaluate to 9.
+should evaluate to 9. Additonally, all functions you create are accessible from
+the console so you can test individual parts of your implementation.
 
 As an extra feature, add a new operator ? to the calculator. When ? is called,
 it prints the current contents of the stack to the console without modifying
 any values. You may implement this in any way you prefer as long as the function
 signature of eval is not changed and the printout is reasonably usable.
 
+In total, we expect this assignment to take about 50 lines of code to implement
+not including test cases or comments. There is no limit on code length, but if
+you find yourself writing hundreds of lines of code you may want to reconsider.
 *)
 
+(*
+This type contains all of the possible varieties of tokens that may appear
+in the input. You will probably want to fill this in as you write lex_token.
+*)
 type token =
-  | Plus
-  | Minus
-  | Times
-  | Divide
-  | Value of float
- 
-let tokenize (s : string) : string list =
-  String.split_on_char ' ' s 
-     
-let lex_token : string -> token = function
-  | "+" -> Plus
-  | "-" -> Minus
-  | "*" -> Times
-  | "/" -> Divide
-  | s when Option.is_some (Float.of_string_opt s) -> Value (Float.of_string s)
-  | s -> invalid_arg s 
-           
-let eval_binary (func : float -> float -> float) : float list -> float list = function
-  | a :: b :: tail -> func b a :: tail
-  | _ -> failwith "Not enough elements on stack!" 
+  | Todo
 
-let eval_rpn_helper (stack : float list) : token -> float list = function
-  | Value n -> n :: stack
-  | Plus -> eval_binary ( +. ) stack
-  | Minus -> eval_binary ( -. ) stack
-  | Times -> eval_binary ( *. ) stack
-  | Divide -> eval_binary ( /. ) stack
-               
-      
+(*
+Breaks a string into space-separated pieces. String.split_on_char may be
+useful.
+Ex. tokenize "1 234 +" = ["1"; "234"; "+"]
+*)
+let tokenize (s : string) : string list =
+  []
+
+(*
+For a given token string, produce a member of the token typeclass that
+represents it. You may want to modify the stub here to allow use of the function
+keyword for slightly nicer pattern-matching, although it's not required.
+Ex. lex_token "1234" = Num 1234 (or whatever you end up using)
+*)
+let lex_token (s : string) : token = 
+  Todo
+
+(*
+Given the current state of the RPN stack, apply the next token to it. Similar to
+lex_token, modifying the stub to allow function matching may be helpful. You may
+also find it useful to write a helper function to abstract away the common parts
+of each operator.
+Ex. eval_rpn_helper [Num 1.; Num 2.] (Num 3.) = [Num 1.; Num 2.; Num 3.]
+Ex. eval_rpn_helper [Num 3.; Num 6.] Plus = [Num 9.]
+*)
+let eval_rpn_helper (stack : float list) (input : token) : float list = 
+  []
+
+(*
+Given a list of tokens, evaluate each in turn on a brand new stack, and then
+return the top of the resulting stack. You can do this in a very clean way with
+List.fold_left, or just use plain old recursion.
+Ex. eval_rpn [Num 1.; Num 2.; Num 3.; Plus; Plus] = 6.
+*)
 let eval_rpn (input : token list) : float = 
-  List.hd @@ List.fold_left eval_rpn_helper [] input
- 
+  0.
+
+(*
+This is the user-facing interface for this program. Given a string, resolve it
+into tokens and then compute and return its result. You shouldn't need much more
+than the functions you've already written, although List.map will make your life
+a little easier.
+Ex. eval "3 2 1 + *" = 9.
+*)
 let eval (s : string) : float =
-  eval_rpn @@ List.map lex_token @@ tokenize s 
+  0.
 
 (* ==================== TEST CODE STARTS HERE ==================== *)
 (* Do not modify code below this point *)
@@ -100,9 +122,6 @@ let tests : (string * test_result) list = [
   "8 7 6 5 4 3 2 1 + + +", Result 10.;
 ]
 
-let run_test : string * float -> bool = function
-  | (expr, expected) -> eval expr == expected
-
 let results_equal : test_result * test_result -> bool = function
   | Result a, Result b -> a == b
   | InvalidArg, InvalidArg -> true
@@ -126,7 +145,7 @@ let run_test : string * test_result -> int = function
       (string_of_test_result expected)
     ; 0)
 
-let () = 
+let test () : unit = 
   Printf.printf "%i of %i tests passed"
   (List.fold_left (+) 0 @@ List.map run_test tests)
   (List.length tests)
