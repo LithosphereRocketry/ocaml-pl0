@@ -86,3 +86,11 @@ let rec controlMap (func : string -> string) (strings : string list) : string li
   | ("$"::next::rest) -> func next :: func next :: controlMap func rest
   | (current::rest) -> func current :: controlMap func rest
   | [] -> ["."]
+
+
+let globalCounter = ref 0
+
+let incGC (c : int) =
+  globalCounter := !globalCounter + 1
+
+let checkGC (n : int) = !globalCounter == n
