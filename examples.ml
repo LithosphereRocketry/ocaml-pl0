@@ -1,4 +1,11 @@
 (*
+To get started, head to https://try.ocaml.pro, paste your code in the editor,
+and click "Eval code". To run a function, type the function name followed by its arguments.
+Ex.
+add3 2
+*)
+
+(*
 Variables are created immutably with let. They may be type-annotated or allowed
 to figure it out for themselves:
 *)
