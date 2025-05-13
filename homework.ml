@@ -65,7 +65,8 @@ let lex_token (s : string) : token =
 Given the current state of the RPN stack, apply the next token to it. Similar to
 lex_token, modifying the stub to allow function matching may be helpful. You may
 also find it useful to write a helper function to abstract away the common parts
-of each operator.
+of each operator. (One weirdness: OCaml uses a different operator for each
+numeric type; floating point operators are all suffixed with ., like '+.'.)
 Ex. eval_rpn_helper [Num 1.; Num 2.] (Num 3.) = [Num 1.; Num 2.; Num 3.]
 Ex. eval_rpn_helper [Num 3.; Num 6.] Plus = [Num 9.]
 *)

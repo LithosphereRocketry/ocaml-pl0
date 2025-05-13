@@ -19,7 +19,8 @@ let add3 (n : int) : int = n + 3
 
 (*
 Functions can also be created anonymously, like lambdas in Scheme. The type
-signature for these functions looks a lot like Haskell's:
+signature for these functions looks a lot like Haskell's. Note that int -> int
+is a type just like any other:
 *)
 let add4 : int -> int = (fun n -> n + 4)
 
@@ -59,30 +60,107 @@ parameter form of let, since function itself produces a lambda.
 *)
 
 (*
+Matches can also have conditions applied using the when keyword:
+*)
+let counting : int -> string = function
+  | 0 -> "Zero"
+  | 1 -> "One"
+  | x when x > 100 -> "really big"
+  | _ -> "I don't know"
+
+(*
 Like most functional languages, OCaml lends itself well to recursive functions.
 Similar to Scheme, recursive functions can be defined with the let rec syntax:
 *)
-
 let rec squareList (l : int list) : int list =
   match l with
   | (current::rest) -> current * current :: squareList rest
   | [] -> []
+(*
+Note the mildly unusual way OCaml displays list types.
+*)
 
+(*
+Since this is a common pattern, we might want to make a function that works
+generally across any operation. Take a shot at implementing myMap, which takes
+a function from integer to integer and maps it across all elements of a list.
+(Solution below the break.)
+*)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*
+Here's one way to do it:
+*)
 let rec myMap (func : int -> int) (l : int list) : int list =
   match l with
   | (current::rest) -> func current :: myMap func rest
   | [] -> []
-
+let squareList (l : int list) : int list =
+  myMap (fun x -> x * x) l
+(*
+Note that when we convert this to the function syntax, just the l parameter gets
+consumed into the result's type. Our function now produces a lambda which
+transforms an int list - thanks to partial evaluation, this doesn't actually
+change anything in practice.
+*)
 let rec myMap (func : int -> int) : int list -> int list = function
   | (current::rest) -> func current :: myMap func rest
   | [] -> []
 
+(*
+As you may guess, OCaml provides an implementation of this already, along with
+the usual complement of other list-procesing primitives:
+*)
 let squareList (l : int list) : int list =
-  myMap (fun x -> x * x) l
+  List.map (fun x -> x * x) l
+let sum (l : int list) : int = 
+  List.fold_left (fun a b -> a + b) 0 l
+(*
+(Note: a fun shortcut with this particular task is that operators may be turned
+into functions with parentheses, so our lambda can just be replaced with (+):)
+*)
+let sum (l : int list) : int = 
+  List.fold_left (+) 0 l
 
-let rec controlMap (func : string -> string) (strings : string list) : string list =
-  match strings with
-  | ("#"::rest) -> controlMap func rest
-  | ("$"::next::rest) -> func next :: func next :: controlMap func rest
-  | (current::rest) -> func current :: controlMap func rest
-  | [] -> ["."]
+(*
+More stuff (this isn't needed for the homework, but it's good to know):
+*)
+
+(*
+Generics work a lot like Haskell, and are frequently used for functions that
+involve tying other functions together:
+*)
+let compose (f : 'a -> 'b) (g : 'b -> 'c) (x : 'a) : 'c = 
+  g (f x)
+
+(*
+While existing operators can't be overloaded, new ones can be defined; any 
+function name matching a certain character set can be an operator:
+*)
+let ( >^^> ) f g = compose f 
+
+(*
+Record types are also similar to Haskell, but have their own member access
+syntax, meaning no name conflicts:
+*)
+type book = {
+  pages : int
+}
+type royal_guard = {
+  pages : string list
+}
