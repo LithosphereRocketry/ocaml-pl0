@@ -138,8 +138,44 @@ let sum (l : int list) : int =
   List.fold_left (+) 0 l
 
 (*
+OCaml supports custom types which are very reminiscent of Haskell. The most
+important to us are variants, which represent a varied collection of things.
+Entries may either be self-contained units or contain some data:
+*)
+type referrer = 
+  | WordOfMouth
+  | Friend of string
+  | Popularity of int
+
+(*
+Of course, these can be pattern-matched:
+*)
+let welcome = function
+  | WordOfMouth -> "Glad you heard about us!"
+  | Friend f -> "Glad " ^ f ^ " told you!"
+  | Popularity p -> "Congrats on becoming one of the " ^ string_of_int p
+
+(*
+One last useful type is option, which works as you'd expect:
+*)
+let read_out: string option -> string = function
+  | Some x -> x
+  | None -> "Oops nothing there"
+
+(*
 More stuff (this isn't needed for the homework, but it's good to know):
 *)
+
+(*
+Mutability is one of the major differences from Haskell. This is implemented
+using the ref datatype, similar to Scheme's boxes:
+*)
+let globalCounter = ref 0
+
+let incGC (c : int) =
+  globalCounter := !globalCounter + 1
+
+let checkGC (n : int) = !globalCounter == n
 
 (*
 Generics work a lot like Haskell, and are frequently used for functions that
@@ -152,7 +188,7 @@ let compose (f : 'a -> 'b) (g : 'b -> 'c) (x : 'a) : 'c =
 While existing operators can't be overloaded, new ones can be defined; any 
 function name matching a certain character set can be an operator:
 *)
-let ( >^^> ) f g = compose f 
+let ( >^^> ) f g = compose f g
 
 (*
 Record types are also similar to Haskell, but have their own member access
