@@ -17,7 +17,7 @@ let lex_token : string -> token = function
   | s -> invalid_arg s 
            
 let eval_binary (func : float -> float -> float) : float list -> float list = function
-  | a :: b :: tail -> func a b :: tail
+  | a :: b :: tail -> func b a :: tail
   | _ -> failwith "Not enough elements on stack!" 
 
 let eval_rpn_helper (stack : float list) : token -> float list = function
@@ -32,4 +32,4 @@ let eval_rpn (input : token list) : float =
   List.hd @@ List.fold_left eval_rpn_helper [] input
  
 let eval (s : string) : float =
-  eval_rpn @@ List.map lex_token @@ tokenize s 
+  eval_rpn @@ List.map lex_token @@ tokenize s

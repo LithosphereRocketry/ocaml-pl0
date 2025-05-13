@@ -4,14 +4,6 @@ type token =
   | Literal of int
   ;;
 
-type aaa = {
-  name : string
-}
-
-type bbb = {
-  name : string
-}
-
 let string_of_token: token -> string = function
   | Period -> "."
   | Write -> "WRITE"
@@ -32,4 +24,4 @@ let rec handle_all: string list -> unit = function
   | path :: rest -> (handle_path path); (handle_all rest)
   | [] -> ()
 
-let () = handle_all @@ List.tl @@ Array.to_list Sys.argv
+let () = ignore @@ handle_all @@ List.tl @@ Array.to_list Sys.argv
