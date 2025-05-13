@@ -4,6 +4,7 @@ type token =
   | Times
   | Divide
   | Value of float
+  | Query
  
 let tokenize (s : string) : string list =
   String.split_on_char ' ' s 
@@ -13,6 +14,7 @@ let lex_token : string -> token = function
   | "-" -> Minus
   | "*" -> Times
   | "/" -> Divide
+  | "?" -> Query
   | s when Option.is_some (Float.of_string_opt s) -> Value (Float.of_string s)
   | s -> invalid_arg s 
            
@@ -26,9 +28,9 @@ let eval_rpn_helper (stack : float list) : token -> float list = function
   | Minus -> eval_binary ( -. ) stack
   | Times -> eval_binary ( *. ) stack
   | Divide -> eval_binary ( /. ) stack
-               
-      
-let eval_rpn (input : token list) : float = 
+  | Query -> print_endline (String.concat ", " @@ List.map string_of_float stack); stack
+
+  let eval_rpn (input : token list) : float = 
   List.hd @@ List.fold_left eval_rpn_helper [] input
  
 let eval (s : string) : float =
