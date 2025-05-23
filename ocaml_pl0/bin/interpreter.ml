@@ -3,7 +3,7 @@ module StringMap = Map.Make(String)
 type environment = {
   constants : int StringMap.t;
   variables : int option StringMap.t;
-  (* procedures *)
+  procedures : Ast.block StringMap.t;
   parent : environment option
 }
 
@@ -18,6 +18,14 @@ let rec lookup_var (env : environment) (v : string) : int =
     match env.parent with
   | Some e -> lookup_var e v
   | None -> (failwith ("Undefined variable " ^ v))
+
+let rec lookup_proc (env : environment) (v : string) : Ast.block = 
+  match StringMap.find_opt v env.procedures with
+  | Some p -> p
+  | None -> 
+    match env.parent with
+  | Some e -> lookup_proc e v
+  | None -> (failwith ("Undefined procedure " ^ v))
 
 let rec set_var (env : environment) (var : string) (num : int) : environment =
   if StringMap.mem var env.variables then { env with
@@ -47,13 +55,14 @@ let rec interpret_statement (env : environment) : Ast.statement -> environment =
       variables = StringMap.update var (fun _ -> Some (Some result) ) env.variables
     }
   | Begin stmts -> List.fold_left interpret_statement env stmts
+  | Call name -> Option.get (interpret_block (Some env) (lookup_proc env name))
   | Empty -> env
   | _ -> failwith "Failure in interpret_statement"
-
-let interpret_block (parent : environment option) (blk : Ast.block) : environment option = 
+and interpret_block (parent : environment option) (blk : Ast.block) : environment option = 
   let env = {
     constants = StringMap.of_list blk.constdef;
     variables = StringMap.of_list @@ List.map (fun a -> (a, None)) blk.vardef;
+    procedures = StringMap.of_list @@ List.map (fun (a : Ast.procedure) -> (a.name, a.body)) blk.procdef;
     parent = parent;
   } in (interpret_statement env blk.stmt).parent
 
