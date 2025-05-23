@@ -31,6 +31,7 @@ rule token = parse
       | '-'                     { MINUS }
       | '*'                     { TIMES }
       | '/'                     { DIVIDE }
+      | '^'                     { POWER }
       | '('                     { LPAREN }
       | ')'                     { RPAREN }
       | ['0'-'9']+ as lxm       { NUMBER(int_of_string lxm) }

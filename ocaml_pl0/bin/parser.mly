@@ -6,7 +6,7 @@ open Ast
 // Keywords
 %token PROCEDURE CONST VAR CALL QUERY DISPLAY BEGIN END IF THEN WHILE DO ODD
 // Operators
-%token UPLUS UMINUS PLUS MINUS TIMES DIVIDE
+%token UPLUS UMINUS PLUS MINUS TIMES DIVIDE POWER
 %token EQ NE LT GT LE GE
 // Structural symbols
 %token ASSIGN COMMA ENDSTMT ENDPROG LPAREN RPAREN
@@ -59,6 +59,7 @@ expression:
     |   expression MINUS expression { Infix ($1, Minus, $3) }
     |   expression TIMES expression { Infix ($1, Times, $3) }
     |   expression DIVIDE expression { Infix ($1, Divide, $3) }
+    |   expression POWER expression { Infix ($1, Power, $3) }
     |   NUMBER { Literal $1 }
     |   IDENT { Variable $1 }
 condition:

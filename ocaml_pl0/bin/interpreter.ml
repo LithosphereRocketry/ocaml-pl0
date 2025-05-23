@@ -35,6 +35,9 @@ let rec set_var (env : environment) (var : string) (num : int) : environment =
   | Some penv -> { env with parent = Some (set_var penv var num) }
   | None -> (failwith ("Tried to assign undefined variable " ^ var))
 
+let rec pow (x : int) (n : int) : int =
+  if n <= 0 then 1 else if n == 1 then x else x * pow x (n - 1)
+
 let rec eval_exp (env : environment) : Ast.expression -> int = function
   | Literal i -> i
   | Prefix (op, i) -> (match op with 
@@ -45,7 +48,8 @@ let rec eval_exp (env : environment) : Ast.expression -> int = function
       | Plus -> ra + rb
       | Minus -> ra - rb
       | Times -> ra * rb
-      | Divide -> ra / rb)
+      | Divide -> ra / rb
+      | Power -> pow ra rb)
   | Variable v -> lookup_var env v
 
 let eval_cond (env : environment) : Ast.condition -> bool = function

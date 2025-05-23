@@ -7,6 +7,7 @@ type infix_operator =
   | Minus
   | Times
   | Divide
+  | Power
 
 type comparison = 
   | Equals
@@ -56,6 +57,7 @@ let rec string_of_exp: expression -> string = function
   | Infix (exp1, Minus, exp2) -> getIn "-" exp1 exp2
   | Infix (exp1, Times, exp2) -> getIn "*" exp1 exp2
   | Infix (exp1, Divide, exp2) -> getIn "/" exp1 exp2
+  | Infix (exp1, Power, exp2) -> getIn "^" exp1 exp2
   | Literal i -> string_of_int i
   | Variable ident -> ident
 
