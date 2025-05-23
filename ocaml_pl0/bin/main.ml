@@ -4,6 +4,7 @@ let handle_code (code : string) =
 let handle_path (path : string) = 
   let f = open_in path in
     let lexbuf = Lexing.from_channel f in
+      ignore (Parsing.set_trace true);
       let _ = Parser.program Lexer.token lexbuf in
         print_endline "hi"
 

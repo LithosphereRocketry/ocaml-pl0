@@ -30,7 +30,7 @@ type statement =
   | Assignment of string * expression
   | Call of string
   | Query of string
-  | Display of string
+  | Display of expression
   | Begin of statement list
   | If of condition * statement
   | While of condition * statement
