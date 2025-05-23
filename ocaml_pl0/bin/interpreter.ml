@@ -60,10 +60,7 @@ let eval_cond (env : environment) : Ast.condition -> bool = function
 
 let rec interpret_statement (env : environment) : Ast.statement -> environment = function
   | Display e -> print_int (eval_exp env e); print_endline ""; env
-  | Assignment (var, exp) -> let result = (eval_exp env exp) in
-    { env with
-      variables = StringMap.update var (fun _ -> Some (Some result) ) env.variables
-    }
+  | Assignment (var, exp) -> set_var env var (eval_exp env exp)
   | Begin stmts -> List.fold_left interpret_statement env stmts
   | Call name -> Option.get (interpret_block (Some env) (lookup_proc env name))
   | Query name -> let v = read_int () in set_var env name v
