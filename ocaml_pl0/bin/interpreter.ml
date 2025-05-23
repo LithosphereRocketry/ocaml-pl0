@@ -56,6 +56,7 @@ let rec interpret_statement (env : environment) : Ast.statement -> environment =
     }
   | Begin stmts -> List.fold_left interpret_statement env stmts
   | Call name -> Option.get (interpret_block (Some env) (lookup_proc env name))
+  | Query name -> let v = read_int () in set_var env name v
   | Empty -> env
   | _ -> failwith "Failure in interpret_statement"
 and interpret_block (parent : environment option) (blk : Ast.block) : environment option = 
