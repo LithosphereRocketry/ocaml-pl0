@@ -4,7 +4,7 @@ open Parser
 }
 rule token = parse
         [' ' '\t' '\r' '\n']+   { token lexbuf } (* skip blanks *)
-      | '.'                     { STOP }
+      | '.'                     { ENDPROG }
       | "const"                 { CONST }
       | '='                     { EQ }
       | ','                     { COMMA }

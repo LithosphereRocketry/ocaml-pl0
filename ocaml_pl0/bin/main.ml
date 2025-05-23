@@ -3,8 +3,9 @@ let handle_code (code : string) =
 
 let handle_path (path : string) = 
   let f = open_in path in
-    let text = In_channel.input_all(f) in
-      handle_code text  
+    let lexbuf = Lexing.from_channel f in
+      let ast = Parser.program Lexer.token lexbuf in
+        print_endline "hi"
 
 let rec handle_all: string list -> unit = function
   | path :: rest -> (handle_path path); (handle_all rest)
