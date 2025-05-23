@@ -45,3 +45,24 @@ type procedure = {
   procdef : procedure list;
   stmt : statement;
 }
+
+let string_of_constdef ((a : string), (b : int)) : string =
+    a ^ " = " ^ string_of_int b
+  
+let string_of_expr: expression -> string = function
+  | Literal i -> string_of_int i
+  | _ -> "unknown expression"
+
+let string_of_stmt: statement -> string = function
+  | Display e -> "! " ^ string_of_expr e ^ ";"
+  | Empty -> ""
+  | _ -> "unknown statement"
+
+let rec string_of_block (b : block) : string = 
+  "const " ^ String.concat ", " (List.map string_of_constdef b.constdef) ^ ";\n" ^
+  "var " ^ String.concat ", " b.vardef ^ ";\n" ^
+  String.concat "\n" (List.map string_of_proc b.procdef) ^ "\n" ^
+  string_of_stmt b.stmt ^ "\n."
+
+and string_of_proc (_ : procedure) : string = 
+  "(PROCEDURE)"
