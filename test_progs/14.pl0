@@ -1,0 +1,8 @@
+var a;
+while
+a <= 14
+do
+begin
+! a;
+a := a + 1
+end .

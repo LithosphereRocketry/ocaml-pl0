@@ -1,0 +1,2 @@
+const a = 13;
+if odd -a then ! (a - 1) / 2 .
