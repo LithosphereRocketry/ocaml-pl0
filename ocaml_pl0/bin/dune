@@ -2,3 +2,5 @@
  (public_name ocaml_pl0)
  (name main)
  (libraries ocaml_pl0))
+(ocamlyacc parser)
+(ocamllex lexer)
