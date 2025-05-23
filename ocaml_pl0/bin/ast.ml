@@ -91,4 +91,4 @@ let rec string_of_block (b : block) : string =
 
 and string_of_proc (p : procedure) : string = 
   "procedure " ^ p.name ^ ";\n" ^
-  string_of_block p.body
+  string_of_block p.body ^ ";"
