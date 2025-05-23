@@ -1,19 +1,5 @@
-type token = 
-  | Period
-  | Write
-  | Literal of int
-  ;;
-
-let string_of_token: token -> string = function
-  | Period -> "."
-  | Write -> "WRITE"
-  | Literal i -> string_of_int i
-
-let tokenize: string -> token list = function
-  | _ -> []
-
 let handle_code (code : string) = 
-  print_endline @@ string_of_token Period; print_endline code
+  print_endline code
 
 let handle_path (path : string) = 
   let f = open_in path in

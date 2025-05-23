@@ -7,9 +7,9 @@ open Ast
 %token PROCEDURE CONST VAR CALL QUERY DISPLAY BEGIN END IF THEN WHILE DO ODD
 // Operators
 %token UPLUS UMINUS PLUS MINUS TIMES DIVIDE
-%token EQUALS NOTEQUALS LESS GREATER LESSEQUAL GREATEREQUAL
+%token EQ NE LT GT LE GE
 // Structural symbols
-%token ASSIGN COMMA ENDSTMT ENDPROG
+%token ASSIGN COMMA ENDSTMT ENDPROG LPAREN RPAREN
 
 // Operator associativity
 %left PLUS MINUS
@@ -33,8 +33,8 @@ block_proc:
     |   statement ENDSTMT { { constdef = []; vardef = []; procdef = [] ; stmt = $1 } }
     |   procedure block_proc { { $2 with procdef = $1 :: $2.procdef }}
 constblock:
-        IDENT EQUALS NUMBER { ($1, $3) :: [] }
-    |   IDENT EQUALS NUMBER COMMA constblock { ($1, $3) :: $5 }
+        IDENT EQ NUMBER { ($1, $3) :: [] }
+    |   IDENT EQ NUMBER COMMA constblock { ($1, $3) :: $5 }
 varblock:
         IDENT { $1 :: [] }
     |   IDENT COMMA varblock { $1 :: $3 }
@@ -52,7 +52,8 @@ beginblock:
 procedure:
         PROCEDURE IDENT ENDSTMT block ENDSTMT { { name = $2; body = $4 }}
 expression:
-        PLUS expression %prec UPLUS { Prefix (Plus, $2) }
+        LPAREN expression RPAREN { $2 }
+    |   PLUS expression %prec UPLUS { Prefix (Plus, $2) }
     |   MINUS expression %prec UMINUS { Prefix (Minus, $2) }
     |   expression PLUS expression { Infix ($1, Plus, $3) }
     |   expression MINUS expression { Infix ($1, Minus, $3) }
@@ -62,10 +63,10 @@ expression:
     |   IDENT { Variable $1 }
 condition:
         ODD expression { Odd $2 }
-    |   expression EQUALS expression { Comparison ($1, Equals, $3) }
-    |   expression NOTEQUALS expression { Comparison ($1, NotEquals, $3) }
-    |   expression LESS expression { Comparison ($1, LessThan, $3) }
-    |   expression LESSEQUAL expression { Comparison ($1, LessEqual, $3) }
-    |   expression GREATER expression { Comparison ($1, GreaterThan, $3) }
-    |   expression GREATEREQUAL expression { Comparison ($1, GreaterEqual, $3) }
+    |   expression EQ expression { Comparison ($1, Equals, $3) }
+    |   expression NE expression { Comparison ($1, NotEquals, $3) }
+    |   expression LT expression { Comparison ($1, LessThan, $3) }
+    |   expression LE expression { Comparison ($1, LessEqual, $3) }
+    |   expression GT expression { Comparison ($1, GreaterThan, $3) }
+    |   expression GE expression { Comparison ($1, GreaterEqual, $3) }
 %%
