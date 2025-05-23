@@ -4,7 +4,7 @@ let handle_code (code : string) =
 let handle_path (path : string) = 
   let f = open_in path in
     let lexbuf = Lexing.from_channel f in
-      let ast = Parser.program Lexer.token lexbuf in
+      let _ = Parser.program Lexer.token lexbuf in
         print_endline "hi"
 
 let rec handle_all: string list -> unit = function

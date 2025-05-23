@@ -43,7 +43,7 @@ statement:
     |   CALL IDENT { Call $2 }
     |   QUERY IDENT { Query $2 }
     |   DISPLAY IDENT { Display $2 }
-    |   BEGIN statement beginblock { Begin $2 :: $3 }
+    |   BEGIN statement beginblock { Begin ($2 :: $3) }
     |   IF condition THEN statement { If ($2, $4) }
     |   WHILE condition DO statement { While ($2, $4) }
 beginblock:
