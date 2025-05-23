@@ -29,8 +29,7 @@ block_var:
         block_proc { $1 }
     |   VAR varblock ENDSTMT block_proc { { $4 with vardef = $2 } }
 block_proc:
-        ENDSTMT { { constdef = []; vardef = []; procdef = [] ; stmt = Empty } }
-    |   statement ENDSTMT { { constdef = []; vardef = []; procdef = [] ; stmt = $1 } }
+        statement { { constdef = []; vardef = []; procdef = [] ; stmt = $1 } }
     |   procedure block_proc { { $2 with procdef = $1 :: $2.procdef }}
 constblock:
         IDENT EQ NUMBER { ($1, $3) :: [] }
@@ -46,6 +45,7 @@ statement:
     |   BEGIN statement beginblock { Begin ($2 :: $3) }
     |   IF condition THEN statement { If ($2, $4) }
     |   WHILE condition DO statement { While ($2, $4) }
+    |   { Empty }
 beginblock:
         END { [] }
     |   ENDSTMT statement beginblock { $2 :: $3 }

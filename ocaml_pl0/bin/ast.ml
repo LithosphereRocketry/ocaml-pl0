@@ -54,7 +54,7 @@ let string_of_expr: expression -> string = function
   | _ -> "unknown expression"
 
 let string_of_stmt: statement -> string = function
-  | Display e -> "! " ^ string_of_expr e ^ ";"
+  | Display e -> "! " ^ string_of_expr e
   | Empty -> ""
   | _ -> "unknown statement"
 
