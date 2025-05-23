@@ -48,6 +48,16 @@ let rec eval_exp (env : environment) : Ast.expression -> int = function
       | Divide -> ra / rb)
   | Variable v -> lookup_var env v
 
+let eval_cond (env : environment) : Ast.condition -> bool = function
+  | Odd expr -> (eval_exp env expr) land 1 = 1
+  | Comparison (a, op, b) -> let ra = (eval_exp env a) and rb = (eval_exp env b) in match op with
+    | LessThan -> ra < rb
+    | GreaterThan -> ra > rb
+    | LessEqual -> ra <= rb
+    | GreaterEqual -> ra >= rb
+    | Equals -> ra = rb
+    | NotEquals -> ra != rb
+
 let rec interpret_statement (env : environment) : Ast.statement -> environment = function
   | Display e -> print_int (eval_exp env e); print_endline ""; env
   | Assignment (var, exp) -> let result = (eval_exp env exp) in
@@ -57,8 +67,12 @@ let rec interpret_statement (env : environment) : Ast.statement -> environment =
   | Begin stmts -> List.fold_left interpret_statement env stmts
   | Call name -> Option.get (interpret_block (Some env) (lookup_proc env name))
   | Query name -> let v = read_int () in set_var env name v
+  | If (cond, body)-> if eval_cond env cond then interpret_statement env body else env
+  | While (cond, body) -> if eval_cond env cond then
+      let env_after = interpret_statement env body in interpret_statement env_after (While (cond, body))
+      else env
   | Empty -> env
-  | _ -> failwith "Failure in interpret_statement"
+  
 and interpret_block (parent : environment option) (blk : Ast.block) : environment option = 
   let env = {
     constants = StringMap.of_list blk.constdef;
