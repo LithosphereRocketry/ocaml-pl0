@@ -18,7 +18,7 @@ open Ast
 
 // Entry point
 %start program
-%type <block> program
+%type <Ast.block> program
 %%
 program:
         block ENDPROG { $1 }
