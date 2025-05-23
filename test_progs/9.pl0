@@ -1,3 +1,5 @@
 var a;
+begin
 a := 9;
-! a .
+! a
+end .
