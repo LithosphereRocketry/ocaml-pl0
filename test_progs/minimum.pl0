@@ -1,2 +1,5 @@
-! 12345;
+const x = 3;
+begin
+    ! x
+end
 .
