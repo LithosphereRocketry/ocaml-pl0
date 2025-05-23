@@ -83,7 +83,7 @@ let run_test : string * test_result -> int = function
            | Failure _ -> Fail
       ) in
     if results_equal (result, expected) then 1
-    else (Printf.printf "Test %s failed: got %s, expected %s"
+    else (Printf.printf "Test %s failed: got %s, expected %s\n"
       expr
       (string_of_test_result result)
       (string_of_test_result expected)
